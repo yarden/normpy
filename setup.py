@@ -16,7 +16,7 @@ for scheme in INSTALL_SCHEMES.values():
 setup(name = 'normpy',
       version = '0.1',
       description = 'Normalization methods for RNA-Seq data.',
-      author = 'Yarden Katz,Rory Kirchner,Ryan Dale,Brad Chapman',
+      author = 'Yarden Katz,Rory Kirchner,Ryan Dale,Brad Chapman,Joe Brown',
       author_email = 'yarden@mit.edu',
       packages = ['normpy'],
       package_dir={'normpy': 'normpy'},
