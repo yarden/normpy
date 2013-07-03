@@ -7,4 +7,3 @@ class Sample:
         self.label = label
         self.counts_fname = counts_fname
 
-
