@@ -2,11 +2,15 @@
 ## Unit tests
 ##
 import os
+
+import pandas
+
 import normpy
 import normpy.utils as utils
 import normpy.edgeR_utils as edgeR_utils
 import normpy.experiment as experiment
 import normpy.normalizers as normalizers
+import normpy.plot_utils as plot_utils
 
 from collections import OrderedDict
 
@@ -70,10 +74,60 @@ def test_deseq():
     print norm_counts_df.head()
 
 
+def test_lowess():
+    """
+    Tests lowess normalization. 
+    """
+    counts_fname = utils.load_testdata("pasilla")
+    # Consider only a subset of the samples
+    samples = OrderedDict()
+    samples["Untreated 1"] = "untreated1"
+    samples["Untreated 2"] = "untreated2"
+    exp_obj = experiment.Experiment(counts_fname, samples)
+    pairs = [["untreated1", "untreated2"]]
+    norm_df, unnorm_df = normalizers.norm_ma_lowess(exp_obj, pairs)
+    print "\nLowess Testing:"
+    print "--------------"
+    print "Pre-normalized values: "
+    print unnorm_df.head()
+    print "Normalized counts: "
+    print norm_df.head()
+    # Compare LOWESS normalized to total counts
+    pair = ["untreated1", "untreated2"]
+    plot_utils.plot_fcs(norm_df, unnorm_df, pair, "lowess_test")
+
+
+def R_test_lowess():
+    """
+    Tests lowess normalization. 
+    """
+    counts_fname = utils.load_testdata("pasilla")
+    # Consider only a subset of the samples
+    samples = OrderedDict()
+    samples["Untreated 1"] = "untreated1"
+    samples["Untreated 2"] = "untreated2"
+    exp_obj = experiment.Experiment(counts_fname, samples)
+    pairs = [["untreated1", "untreated2"]]
+    norm_df, unnorm_df = normalizers.R_norm_ma_lowess(exp_obj, pairs)
+    print "\nLowess Testing:"
+    print "--------------"
+    print "Pre-normalized values: "
+    print unnorm_df.head()
+    print "Normalized counts: "
+    print norm_df.head()
+    # Compare LOWESS normalized to total counts
+    pair = ["untreated1", "untreated2"]
+    plot_utils.plot_fcs(norm_df, unnorm_df, pair, "R_lowess_test")
+
+
+
+
 def main():
     test_edgeR()
     test_tc()
     test_deseq()
+    #test_lowess()
+    R_test_lowess()
 
 
 if __name__ == "__main__":

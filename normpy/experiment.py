@@ -11,6 +11,21 @@ import pandas
 
 from collections import OrderedDict
 
+
+try:
+    import rpy2
+    from rpy2.robjects import r
+    import rpy2.robjects as robj
+    import rpy2.robjects.numpy2ri
+    from rpy2.robjects.packages import importr
+    rpy2.robjects.numpy2ri.activate()
+    from rpy2.robjects.lib import grid
+    from rpy2.robjects import r, Formula
+    py2ri_orig = rpy2.robjects.conversion.py2ri
+except:
+    raise Exception, "Cannot import rpy2."
+
+
 class Experiment:
     """
     Representation of an Experiment, which involves a set
