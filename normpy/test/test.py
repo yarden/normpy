@@ -120,6 +120,42 @@ def R_test_lowess():
     plot_utils.plot_fcs(norm_df, unnorm_df, pair, "R_lowess_test")
 
 
+def test_tmm():
+    """
+    Calls TMM normalization. Prints raw counts then normed counts.
+    """
+    counts_fname = utils.load_testdata("pasilla")
+    # Consider only a subset of the samples
+    samples = OrderedDict()
+    samples["Untreated 1"] = "untreated1"
+    samples["Untreated 2"] = "untreated2"
+    exp_obj = experiment.Experiment(counts_fname, samples)
+    norm_counts_df = normalizers.norm_tmm(exp_obj)
+    print "\nTMM Testing:"
+    print "--------------"
+    print "Pre-normalized counts: "
+    print exp_obj.counts_df.head()
+    print "Normalized counts: "
+    print norm_counts_df.head()
+
+
+def test_quantile():
+    """
+    Calls quantile normalization. Prints raw counts then normed counts.
+    """
+    counts_fname = utils.load_testdata("pasilla")
+    # Consider only a subset of the samples
+    samples = OrderedDict()
+    samples["Untreated 1"] = "untreated1"
+    samples["Untreated 2"] = "untreated2"
+    exp_obj = experiment.Experiment(counts_fname, samples)
+    norm_counts_df = normalizers.norm_q(exp_obj)
+    print "\nQuantile Testing:"
+    print "--------------"
+    print "Pre-normalized counts: "
+    print exp_obj.counts_df.head()
+    print "Normalized counts: "
+    print norm_counts_df.head()
 
 
 def main():
@@ -128,6 +164,8 @@ def main():
     test_deseq()
     #test_lowess()
     R_test_lowess()
+    test_tmm()
+    test_quantile()
 
 
 if __name__ == "__main__":
