@@ -276,7 +276,7 @@ def _sf_tmm(obs, ref, log_ratio_trim=0.3, sum_trim=0.05, weighting=True, a_cutof
     # estimated asymptotic variance
     v = (obs_sum - obs) / obs_sum / obs + (ref_sum - ref) / ref_sum / ref
     # create mask
-    m = np.isfinite(lr) & np.isfinite(ae) & (ae > -1e10)
+    m = np.isfinite(lr) & np.isfinite(ae) & (ae > a_cutoff)
     # drop the masked values
     lr = lr[m]
     ae = ae[m]
