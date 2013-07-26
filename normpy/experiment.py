@@ -32,17 +32,19 @@ class Experiment:
     of Samples and technical parameters of the experiment
     (experimental design, the type of sequencing reads, etc.)
     """
-    def __init__(self, counts_fname, samples,
+    def __init__(self, counts, samples,
                  gene_id_col="gene_id",
                  lib_sizes=None,
                  reads_type="single",
-                 exp_type=None):
+                 exp_type="vanilla",
+                 extra_cols=[]):
         """
         Setup the experiments.
 
         Parameters:
         ----------
-        - counts_fname: filename with counts for each sample in the experiment
+        - counts: if string, then treated as a filename with counts for each sample.
+        if of type pandas.DataFrame, then used as dataframe of counts.
         - samples: samples in the experiment. Mapping from sample labels
         to columns in a counts filename.
         - gene_id_col: column that identifies the gene id. Must be unique
@@ -52,13 +54,17 @@ class Experiment:
         - reads_type: single-end or paired-end. 
         - exp_type: The experimental design type. (Not used
         for now.)
+        - extra_cols: optional list of extra columns to import from
+        data frame into normalized column
         """
-        self.counts_fname = counts_fname
+        self.counts = counts
         self.samples = samples
+        self.num_samples = len(self.samples)
         self.gene_id_col = gene_id_col
         self.lib_sizes = lib_sizes
         self.reads_type = reads_type
         self.exp_type = exp_type
+        self.extra_cols = extra_cols
         # dataframe with counts for all samples
         self.counts_df = None
         self.load_counts()
@@ -68,12 +74,35 @@ class Experiment:
         """
         Load counts for all samples into pandas dataframe.
         """
-        if not os.path.isfile(self.counts_fname):
-            raise Exception, "Cannot find counts file %s" %(self.counts_fname)
-        self.counts_df = pandas.read_table(self.counts_fname, sep=sep)
+        if type(self.counts) == str:
+            if not os.path.isfile(self.counts):
+                raise Exception, "Cannot find counts file %s" %(self.counts)
+            counts_fname = self.counts
+            self.counts_df = pandas.read_table(counts_fname, sep=sep)
+        else:
+            # Assume we were given a dataframe
+            self.counts_df = self.counts
+        # Set gene id column to be the index unless it is
+        # not found in the table, in which case assume
+        # it is already indexed by that column
+        if self.gene_id_col in self.counts_df:
+            self.counts_df = self.counts_df.set_index(self.gene_id_col)
         # Select only the columns relevant to the samples, plus
         # the gene id column
-        relevant_cols = [self.gene_id_col] + self.samples.values()
+        relevant_cols = self.extra_cols + self.samples.values()
+        print "SELECTING ONLY: ", relevant_cols, len(relevant_cols)
         self.counts_df = self.counts_df[relevant_cols]
-        # Set gene id column to be the index
-        self.counts_df = self.counts_df.set_index(self.gene_id_col)
+
+
+    def __repr__(self):
+        return self.__str__()
+
+
+    def __str__(self):
+        str_obj = \
+            "Experiment(type=%s, num_samples=%d, reads_type=%s)" \
+            %(self.exp_type,
+              self.num_samples,
+              self.reads_type)
+        return str_obj
+

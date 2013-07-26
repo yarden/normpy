@@ -6,6 +6,21 @@ import numpy as np
 import pandas
 
 
+def pathify(filename):
+    return os.path.abspath(os.path.expanduser(filename))
+
+
+def make_dir(dirpath):
+    if os.path.isfile(dirpath):
+        print "Error: %s is a file!" %(dirpath)
+        sys.exit(1)
+    # Try to make the directory
+    try:
+        os.makedirs(dirpath)
+    except OSError:
+        pass
+
+
 def load_testdata(test_name):
     testdir = os.path.join("test", "data")
     if test_name == "pasilla":

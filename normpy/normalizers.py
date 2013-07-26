@@ -259,7 +259,11 @@ def norm_deseq(exp_obj):
     df = df.div(sf, axis=1)
     return df
 
-def _sf_tmm(obs, ref, log_ratio_trim=0.3, sum_trim=0.05, weighting=True, a_cutoff=-1e10):
+def _sf_tmm(obs, ref,
+            log_ratio_trim=0.3,
+            sum_trim=0.05,
+            weighting=True,
+            a_cutoff=-1e10):
     """
     Called by `norm_tmm`.
     """
@@ -312,7 +316,12 @@ def _sf_q(df, q=0.75):
     sf = y.div(np.exp(np.mean(np.log(y))))
     return sf
 
-def norm_tmm(exp_obj, ref_col=None, log_ratio_trim=0.3, sum_trim=0.05, weighting=True, a_cutoff=-1e10):
+def norm_tmm(exp_obj,
+             ref_col=None,
+             log_ratio_trim=0.3,
+             sum_trim=0.05,
+             weighting=True,
+             a_cutoff=-1e10):
     """
     Trimmed Mean of M-values (TMM) is the weighted mean of log ratios between
     this test and the reference, after exclusion of the most expressed genes
@@ -337,11 +346,11 @@ def norm_tmm(exp_obj, ref_col=None, log_ratio_trim=0.3, sum_trim=0.05, weighting
         sf_q = _sf_q(nz)
         ref_col = (abs(sf_q - np.mean(sf_q))).idxmin()
     # try:
-    kwargs = {"ref":nz[ref_col],
-                "log_ratio_trim":log_ratio_trim,
-                "sum_trim":sum_trim,
-                "weighting":weighting,
-                "a_cutoff":a_cutoff}
+    kwargs = {"ref": nz[ref_col],
+              "log_ratio_trim": log_ratio_trim,
+              "sum_trim": sum_trim,
+              "weighting": weighting,
+              "a_cutoff": a_cutoff}
     # except KeyError:
         # revert back to auto?
     sf_tmm = nz.apply(_sf_tmm, **kwargs)
