@@ -201,7 +201,7 @@ def test_quantile_vs_tmm():
     print log_counts_df.head()
     # Plot correlation
     from pandas.tools.plotting import scatter_matrix
-    scatter_matrix(log_counts_df, alpha=0.2)
+    scatter_matrix(log_counts_df, alpha=0.2, figsize=(8, 7))
     plot_utils.save_fig("quantile_vs_tmm_corr", ext="png")
 
 
