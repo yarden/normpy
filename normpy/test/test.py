@@ -204,7 +204,7 @@ def test_quantile_vs_tmm():
     scatter_matrix(log_counts_df, alpha=0.2, figsize=(8, 7))
     plot_utils.save_fig("quantile_vs_tmm_corr", ext="png")
 
-
+    
 def main():
     test_edgeR()
     test_tc()

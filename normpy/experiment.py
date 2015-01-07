@@ -90,7 +90,6 @@ class Experiment:
         # Select only the columns relevant to the samples, plus
         # the gene id column
         relevant_cols = self.extra_cols + self.samples.values()
-        print "SELECTING ONLY: ", relevant_cols, len(relevant_cols)
         self.counts_df = self.counts_df[relevant_cols]
 
 
