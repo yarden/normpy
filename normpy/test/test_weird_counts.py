@@ -9,6 +9,8 @@ import normpy.utils as utils
 import normpy.experiment as experiment
 import normpy.normalizers as normalizers
 
+import matplotlib.pylab as plt
+
 def test_weird_counts():
     samples = {"counts_A": "counts_A",
                "counts_B": "counts_B",
@@ -37,7 +39,7 @@ def test_weird_counts():
     deseq_A_vs_C = deseq_norm.ix[g]["counts_A"] / deseq_norm.ix[g]["counts_C"]
     print "TMM fold change A vs. C: %.2f" %(tmm_A_vs_C)
     print "DESeq fold change A vs. C: %.2f" %(deseq_A_vs_C)
-
+    
 
 def main():
     test_weird_counts()
